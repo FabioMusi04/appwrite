@@ -9,6 +9,7 @@ import PrivateRoute from './components/privateroute';
 import Navbar from './components/navbar';
 import ProductsPage from './pages/products';
 import AdminProductsPage from './pages/backoffice/productsCRUD';
+import AdminUsersPage from './pages/backoffice/usersCRUD';
 
 createRoot(document.getElementById('root')!).render(
   <div className="flex flex-col w-full min-h-screen">
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<><Navbar /><PrivateRoute><ProductsPage /></PrivateRoute></>} />
           <Route path="/handleproducts" element={<><Navbar /><PrivateRoute><AdminProductsPage /></PrivateRoute></>} />
+          <Route path="/handleusers" element={<><Navbar /><PrivateRoute><AdminUsersPage /></PrivateRoute></>} />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </UserProvider>

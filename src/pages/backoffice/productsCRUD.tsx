@@ -129,7 +129,6 @@ const AdminProductsPage: React.FC = () => {
                 )}
             </form>
 
-            {/* Products Table */}
             <table className="min-w-full bg-white dark:bg-gray-800">
                 <thead>
                     <tr className="border-b dark:border-gray-700">

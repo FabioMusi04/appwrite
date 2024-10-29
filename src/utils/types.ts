@@ -8,3 +8,9 @@ export interface Product {
     discount: number;
     stock: number;
 }
+
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+}

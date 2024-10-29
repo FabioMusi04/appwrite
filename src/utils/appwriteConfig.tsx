@@ -18,8 +18,6 @@ const DataBaseCollections = {
     PRODUCTS: import.meta.env.VITE_APPWRITE_PRODUCT_COLLECTION as string,
 };
 
-console.log(DataBaseNames, DataBaseCollections);
-
 export async function GenerateProducts() {
     for (let i = 0; i < 100; i++) {
         await databases.createDocument(
@@ -49,4 +47,13 @@ export async function GetProducts(page: number, limit: number) {
     );
 
     return response.documents;
+}
+
+export async function GetUsers(page: number, limit: number) {
+    const response = {
+        users: [
+        ],
+    }
+
+    return response.users;
 }
