@@ -18,8 +18,8 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<><Navbar /><PrivateRoute><ProductsPage /></PrivateRoute></>} />
-          <Route path="/handleproducts" element={<><Navbar /><PrivateRoute><AdminProductsPage /></PrivateRoute></>} />
-          <Route path="/handleusers" element={<><Navbar /><PrivateRoute><AdminUsersPage /></PrivateRoute></>} />
+          <Route path="/handleproducts" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminProductsPage /></PrivateRoute></>} />
+          <Route path="/handleusers" element={<><Navbar /><PrivateRoute  roles={['admin']}><AdminUsersPage /></PrivateRoute></>} />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </UserProvider>

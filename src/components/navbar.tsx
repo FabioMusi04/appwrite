@@ -3,6 +3,10 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { UserAuthContext } from '../components/authcontext';
+import { FaUsers } from "react-icons/fa";
+import { FiPackage } from "react-icons/fi";
+import { GrNotes } from "react-icons/gr";
+import { FcAbout } from "react-icons/fc";
 
 const Navbar: React.FC = () => {
   const context = useContext(UserAuthContext);
@@ -17,7 +21,14 @@ const Navbar: React.FC = () => {
           </Link>
           <div className="hidden md:flex space-x-4">
             <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">Products</Link>
-            <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">About</Link>
+            <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FcAbout/></Link>
+            {user && user.labels.includes('admin') && (
+              <>
+              <Link to="/handleproducts" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FiPackage /></Link>
+              <Link to="/handleusers" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FaUsers /></Link>
+              <Link to="/handleorders" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><GrNotes/></Link> 
+              </>
+            )}
           </div>
         </div>
         <div className="flex items-center space-x-4">
