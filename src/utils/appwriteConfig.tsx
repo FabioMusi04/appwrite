@@ -1,4 +1,5 @@
 import { Client, Account, Databases, ID, Query } from 'appwrite';
+import { CartItem } from './types';
 
 export const client = new Client();
 
@@ -82,4 +83,55 @@ export async function GetUsers(page: number, limit: number) {
     }
 
     return response.users;
+}
+
+
+export async function GetCart() {
+    const user = await account.get();
+    if (!user) return null;
+
+    const response = await databases.listDocuments(
+        DataBaseNames.ECOMMERCE,
+        'cart',
+        [
+            Query.equal('userId', user.$id),
+        ],
+    );
+
+    if (response.documents.length === 0) {
+        const cart = await databases.createDocument(
+            DataBaseNames.ECOMMERCE,
+            'cart',
+            ID.unique(),
+            {
+                items: [],
+                userId: user.$id,
+            },
+        );
+
+        return cart;
+    }
+
+    return response.documents[0];
+}
+
+export async function UpdateCart(productId: string | undefined, quantity: number, price: number) {
+    if (!productId) return;
+    const cart = await GetCart();
+    if (!cart) return;
+
+    const itemIndex = cart.items.findIndex((item: CartItem) => item.productId === productId);
+    if (quantity > 0) {
+        if (itemIndex === -1) {
+            cart.items.push({
+                productId,
+                quantity,
+                price: price,
+            });
+        } else {
+            cart.items[itemIndex].quantity += quantity;
+        }
+    } else {
+        cart.items.splice(itemIndex, 1);
+    }
 }
