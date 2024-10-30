@@ -1,5 +1,4 @@
 export interface Product {
-    id: string;
     name: string;
     description: string;
     price: number;
@@ -7,6 +6,12 @@ export interface Product {
     isDiscounted: boolean;
     discount: number;
     stock: number;
+    $id: string;
+    $createdAt: string;
+    $updatedAt: string;
+    $permissions: string[];
+    $databaseId: string;
+    $collectionId: string;
 }
 
 export interface User {

@@ -46,14 +46,18 @@ const Auth: React.FC = () => {
             }
 
             try {
-                const user = await account.createEmailPasswordSession(email, password);
-                console.log(user);   
-                setUser(user);
-                if (user.userId === '6720fd1c00318d411f6c') {
-                    navigate('/handleproducts');
-                } else {
-                    navigate('/');
+                const session = await account.createEmailPasswordSession(email, password);
+                if (session) {
+                    const user = await account.get();
+                    setUser(user);
+                    console.log(user);
+                    if (user?.labels?.includes('admin')) {
+                        console.log("Admin user detected");
+                        return navigate('/handleproducts');
+                    }
+                    return navigate('/');
                 }
+
             } catch (error: any) {
                 alert(error.message);
             }

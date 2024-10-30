@@ -163,7 +163,6 @@ const AdminProductsPage: React.FC = () => {
                 </tbody>
             </table>
 
-            {/* Pagination Controls */}
             <div className="flex justify-between mt-4">
                 <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

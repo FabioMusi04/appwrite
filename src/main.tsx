@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 
@@ -10,6 +9,7 @@ import Navbar from './components/navbar';
 import ProductsPage from './pages/products';
 import AdminProductsPage from './pages/backoffice/productsCRUD';
 import AdminUsersPage from './pages/backoffice/usersCRUD';
+import ProductDetailPage from './pages/product';
 
 createRoot(document.getElementById('root')!).render(
   <div className="flex flex-col w-full min-h-screen">
@@ -17,9 +17,11 @@ createRoot(document.getElementById('root')!).render(
       <UserProvider>
         <Routes>
           <Route path="/auth" element={<Auth />} />
-          <Route path="/" element={<><Navbar /><PrivateRoute><ProductsPage /></PrivateRoute></>} />
+          <Route path="/products" element={<><Navbar /><PrivateRoute><ProductsPage /></PrivateRoute></>} />
           <Route path="/handleproducts" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminProductsPage /></PrivateRoute></>} />
           <Route path="/handleusers" element={<><Navbar /><PrivateRoute  roles={['admin']}><AdminUsersPage /></PrivateRoute></>} />
+          <Route path="/" element={<div>Home</div>} />
+          <Route path="/product/:productId" element={ <><Navbar /><PrivateRoute ><ProductDetailPage/></PrivateRoute></> }/>
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </UserProvider>

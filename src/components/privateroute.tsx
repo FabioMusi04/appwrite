@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
         return <Navigate to="/auth" />;
     }
 
-    if (roles && roles.length > 0 && !roles.some(role => user.labels.includes(role))) {
+    if (roles && roles.length > 0 && !roles.some(role => user?.labels?.includes(role))) {
         return <Navigate to="/unauthorized" />;
     }
 
