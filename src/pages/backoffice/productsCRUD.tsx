@@ -129,7 +129,6 @@ const AdminProductsPage: React.FC = () => {
                 )}
             </form>
 
-            {/* Products Table */}
             <table className="min-w-full bg-white dark:bg-gray-800">
                 <thead>
                     <tr className="border-b dark:border-gray-700">
@@ -164,7 +163,6 @@ const AdminProductsPage: React.FC = () => {
                 </tbody>
             </table>
 
-            {/* Pagination Controls */}
             <div className="flex justify-between mt-4">
                 <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

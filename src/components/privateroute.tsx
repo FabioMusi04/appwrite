@@ -2,14 +2,27 @@ import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserAuthContext } from "./authcontext";
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+interface ProtectedRouteProps {
+    children: JSX.Element;
+    roles?: string[]; 
+}
+
+const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
     const { user, isLoading } = useContext(UserAuthContext) ?? {};
 
     if (isLoading) {
-        return <div>Loading...</div>; // or any loading indicator
+        return <div>Loading...</div>; 
     }
 
-    return user ? children : <Navigate to="/auth" />;
+    if (!user) {
+        return <Navigate to="/auth" />;
+    }
+
+    if (roles && roles.length > 0 && !roles.some(role => user?.labels?.includes(role))) {
+        return <Navigate to="/unauthorized" />;
+    }
+
+    return children;
 };
 
 export default ProtectedRoute;

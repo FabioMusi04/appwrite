@@ -18,8 +18,6 @@ const DataBaseCollections = {
     PRODUCTS: import.meta.env.VITE_APPWRITE_PRODUCT_COLLECTION as string,
 };
 
-console.log(DataBaseNames, DataBaseCollections);
-
 export async function GenerateProducts() {
     for (let i = 0; i < 100; i++) {
         await databases.createDocument(
@@ -49,4 +47,39 @@ export async function GetProducts(page: number, limit: number) {
     );
 
     return response.documents;
+}
+
+export async function GetProduct(id: string) {
+    const response = await databases.getDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.PRODUCTS,
+        id,
+    );
+
+    return response;
+}
+
+export async function GetProductsWithSearch(page: number, limit: number, search: string) {
+    const response = await databases.listDocuments(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.PRODUCTS,
+        [
+            Query.limit(limit),
+            Query.offset((page - 1) * limit),
+            Query.search('name', search),
+        ],
+    );
+
+    
+
+    return response.documents;
+}
+
+export async function GetUsers(page: number, limit: number) {
+    const response = {
+        users: [
+        ],
+    }
+
+    return response.users;
 }
