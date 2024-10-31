@@ -4,6 +4,7 @@ import { GetProducts, GetProductsWithSearch } from '../utils/appwriteConfig';
 import { FiSearch } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { Product } from '../utils/types';
+import Spinner from '../components/loading';
 
 const ProductsPage: React.FC = () => {
     const navigate = useNavigate();
@@ -80,7 +81,7 @@ const ProductsPage: React.FC = () => {
                 ))}
             </div>
             <div ref={ref} className="h-16 flex items-center justify-center">
-                {loading ? <span>Loading...</span> : hasMore ? <span>Scroll down for more products...</span> : <span>No more products!</span>}
+                {loading ? <Spinner /> : hasMore ? <span>Scroll down for more products...</span> : <span>No more products!</span>}
             </div>
         </div>
     );

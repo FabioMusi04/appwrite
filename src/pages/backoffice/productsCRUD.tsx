@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Product } from '../../utils/types';
+import { Product, ProductIns } from '../../utils/types';
 import { GenerateProducts, GetProducts, ID } from '../../utils/appwriteConfig';
 import { FaEdit  } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -9,15 +9,17 @@ const AdminProductsPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState<Omit<Product, 'id'>>({
-        name: '',
-        description: '',
-        price: 0,
-        imageUrl: '',
-        isDiscounted: false,
-        discount: 0,
-        stock: 0,
-    });
+    const [formData, setFormData] = useState<Omit<ProductIns, 'id'>>(
+        {
+            name: '',
+            description: '',
+            price: 0,
+            imageUrl: '',
+            isDiscounted: false,
+            discount: 0,
+            stock: 0,
+        }
+    );
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(10); // Number of products per page
 
@@ -28,7 +30,7 @@ const AdminProductsPage: React.FC = () => {
     const fetchProducts = async () => {
         try {
             const response = await GetProducts(1, 100); // Fetch a larger set for pagination
-            setProducts(response);
+            setProducts(response as Product[]);
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -141,7 +143,7 @@ const AdminProductsPage: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentProducts.map((product) => (
+                    {currentProducts.map((product: Product) => (
                         <tr key={ID.unique()} className="border-b dark:border-gray-700 text-center">
                             <td className="p-4">
                                 <img src={product.imageUrl} alt={product.name} className="w-16 h-16 object-cover rounded" />
@@ -154,7 +156,7 @@ const AdminProductsPage: React.FC = () => {
                                 <button onClick={() => handleEdit(product)} className="p-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800">
                                     <FaEdit/>
                                 </button>
-                                <button onClick={() => handleDelete(product.id)} className="ml-2 p-2 bg-red-500 text-white rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
+                                <button onClick={() => handleDelete(product.$id)} className="ml-2 p-2 bg-red-500 text-white rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
                                     <MdDelete/>
                                 </button>
                             </td>

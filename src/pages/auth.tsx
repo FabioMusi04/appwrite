@@ -5,6 +5,7 @@ import { validateEmail, validatePassword } from '../utils/validation.ts';
 
 import { account, ID } from '../utils/appwriteConfig';
 import { UserAuthContext } from '../components/authcontext';
+import Spinner from '../components/loading.tsx';
 
 const Auth: React.FC = () => {
     const context = useContext(UserAuthContext);
