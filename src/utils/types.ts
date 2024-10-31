@@ -26,7 +26,7 @@ export interface ProductIns {
 
 export interface Cart {
     items: CartItem[];
-    userId: string;
+    user: User;
 
     $id: string;
     $createdAt: string;
@@ -37,7 +37,7 @@ export interface Cart {
 }
 
 export interface CartItem {
-    productId: string;
+    product: Product;
     quantity: number;
     price: number;
 }

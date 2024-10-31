@@ -99,7 +99,7 @@ export async function GetCart() {
         DataBaseNames.ECOMMERCE,
         DataBaseCollections.CARTS,
         [
-            Query.equal('userId', user.$id),
+            Query.equal('user', user.$id),
         ],
     );
 
@@ -110,7 +110,7 @@ export async function GetCart() {
             ID.unique(),
             {
                 items: [],
-                userId: user.$id,
+                user: user.$id,
             },
         );
 
@@ -129,17 +129,16 @@ export async function UpdateCart(productId: string | undefined, quantity: number
     if (!cart) return;
 
     const itemIndex = cart.items.findIndex((item: CartItem) => {
-        console.log(item.productId, productId);
-        return item.productId === productId;
+        console.log(item.product.$id, productId);
+        return item.product.$id === productId;
     });
-    console.log('Item index:', itemIndex);
     if (quantity > 0) {
         if (itemIndex === -1) {
             cart.items.push({
-                productId,
+                product: await GetProduct(productId),
                 quantity,
                 price: price,
-                cartId: cart.$id,
+                cart: cart.$id,
             });
         } else {
             cart.items[itemIndex].quantity += quantity;
