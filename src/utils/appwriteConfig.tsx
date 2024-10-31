@@ -20,10 +20,6 @@ const DataBaseCollections = {
     CARTS: import.meta.env.VITE_APPWRITE_CART_COLLECTION as string,
 };
 
-
-//setup db collections fields and indexes
-
-
 export async function GenerateProducts() {
     for (let i = 0; i < 100; i++) {
         await databases.createDocument(
@@ -155,4 +151,21 @@ export async function UpdateCart(productId: string | undefined, quantity: number
             items: cart.items,
         },
     );
+}
+
+export async function CreateOrder() {
+    const cart = await GetCart();
+    if (!cart) return;
+
+    const order = await databases.createDocument(
+        DataBaseNames.ECOMMERCE,
+        'orders',
+        ID.unique(),
+        {
+            items: cart.items,
+            user: cart.user,
+        },
+    );
+
+    return order;
 }
