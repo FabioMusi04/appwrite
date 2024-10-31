@@ -3,9 +3,9 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { validateEmail, validatePassword } from '../utils/validation.ts';
 
-import { account, ID } from '../utils/appwriteconfig.tsx';
+import { account, ID } from '../utils/appwriteconfig';
 import { UserAuthContext } from '../components/authcontext';
-import Spinner from '../components/loading.tsx';
+import Spinner from '../components/loading';
 
 const Auth: React.FC = () => {
     const context = useContext(UserAuthContext);
@@ -56,7 +56,7 @@ const Auth: React.FC = () => {
                         console.log("Admin user detected");
                         return navigate('/handleproducts');
                     }
-                    return navigate('/');
+                    return navigate('/products');
                 }
 
             } catch (error: any) {
