@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
             E-Commerce
           </Link>
           <div className="hidden md:flex space-x-4">
-            <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FaShoppingBag className="h-6 w-6" /></Link>
+            <Link to="/products" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FaShoppingBag className="h-6 w-6" /></Link>
             <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FcAbout className="h-6 w-6" /></Link>
             {user && user?.labels?.includes('admin') && (
               <>
