@@ -13,6 +13,7 @@ import ProductDetailPage from './pages/product';
 import CartPage from './pages/cart';
 import ProfilePage from './pages/profilepage';
 import HomePage from './pages/home';
+import NotFound from './pages/notfound';
 
 createRoot(document.getElementById('root')!).render(
   <div className="flex flex-col w-full min-h-screen">
@@ -27,7 +28,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<HomePage/>} />
           <Route path="/product/:productId" element={ <><Navbar /><PrivateRoute ><ProductDetailPage/></PrivateRoute></> }/>
           <Route path="/cart"  element={ <><Navbar /><PrivateRoute ><CartPage/></PrivateRoute></> } />
-          <Route path="*" element={<div>404</div>} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
       </UserProvider>
     </Router>
