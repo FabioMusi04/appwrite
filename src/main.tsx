@@ -11,6 +11,7 @@ import AdminProductsPage from './pages/backoffice/productsCRUD';
 import AdminUsersPage from './pages/backoffice/usersCRUD';
 import ProductDetailPage from './pages/product';
 import CartPage from './pages/cart';
+import ProfilePage from './pages/profilepage';
 
 createRoot(document.getElementById('root')!).render(
   <div className="flex flex-col w-full min-h-screen">
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')!).render(
       <UserProvider>
         <Routes>
           <Route path="/auth" element={<Auth />} />
+          <Route path="/me"  element={ <><Navbar /><PrivateRoute ><ProfilePage/></PrivateRoute></> } />
           <Route path="/products" element={<><Navbar /><PrivateRoute><ProductsPage /></PrivateRoute></>} />
           <Route path="/handleproducts" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminProductsPage /></PrivateRoute></>} />
           <Route path="/handleusers" element={<><Navbar /><PrivateRoute  roles={['admin']}><AdminUsersPage /></PrivateRoute></>} />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { User } from '../../utils/types'; // Assuming you have a User type defined
-import { GetUsers, ID } from '../../utils/appwriteConfig'; // Assuming you have a GetUsers function
+import { GetUsers, ID } from '../../utils/appwriteconfig'; // Assuming you have a GetUsers function
 
 const AdminUsersPage: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);

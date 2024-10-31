@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Product, ProductIns } from '../../utils/types';
-import { GenerateProducts, GetProducts, ID } from '../../utils/appwriteConfig';
+import { GenerateProducts, GetProducts, ID } from '../../utils/appwriteconfig';
 import { FaEdit  } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 

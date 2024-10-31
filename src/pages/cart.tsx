@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Cart } from '../utils/types';
-import { GetCart } from '../utils/appwriteConfig';
+import { GetCart } from '../utils/appwriteconfig';
 
 const CartPage: React.FC = () => {
     const [cartItems, setCartItems] = useState<Cart>();

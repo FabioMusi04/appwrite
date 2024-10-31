@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { GetProducts, GetProductsWithSearch } from '../utils/appwriteConfig';
+import { GetProducts, GetProductsWithSearch } from '../utils/appwriteconfig';
 import { FiSearch } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { Product } from '../utils/types';

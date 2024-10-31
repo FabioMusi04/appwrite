@@ -3,7 +3,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { validateEmail, validatePassword } from '../utils/validation.ts';
 
-import { account, ID } from '../utils/appwriteConfig';
+import { account, ID } from '../utils/appwriteconfig.tsx';
 import { UserAuthContext } from '../components/authcontext';
 import Spinner from '../components/loading.tsx';
 

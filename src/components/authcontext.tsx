@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState, ReactNode, useMemo } from "react";
-import { account } from "../utils/appwriteConfig";
+import { account } from "../utils/appwriteconfig";
 import { Models } from "appwrite";
 import Spinner from "./loading";
 

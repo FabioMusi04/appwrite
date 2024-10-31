@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { GetProduct, UpdateCart } from '../utils/appwriteConfig';
+import { GetProduct, UpdateCart } from '../utils/appwriteconfig';
 import { Product } from '../utils/types';
 import { FaShoppingCart } from 'react-icons/fa';
 import Spinner from '../components/loading';

@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
 
           {user ? (
             <>
-              <Link to="/profile" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><IoPerson className="h-6 w-6"/></Link>
+              <Link to="/me" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><IoPerson className="h-6 w-6"/></Link>
               <button
                 onClick={() => logout()}
                 className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
