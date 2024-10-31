@@ -61,6 +61,18 @@ export async function GetProduct(id: string) {
     return response;
 }
 
+export async function GetSuggestedProducts() {
+    const response = await databases.listDocuments(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.PRODUCTS,
+        [
+            Query.limit(4),
+        ],
+    );
+
+    return response.documents;
+}
+
 export async function GetProductsWithSearch(page: number, limit: number, search: string) {
     const response = await databases.listDocuments(
         DataBaseNames.ECOMMERCE,
