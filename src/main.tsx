@@ -10,6 +10,7 @@ import ProductsPage from './pages/products';
 import AdminProductsPage from './pages/backoffice/productsCRUD';
 import AdminUsersPage from './pages/backoffice/usersCRUD';
 import ProductDetailPage from './pages/product';
+import CartPage from './pages/cart';
 
 createRoot(document.getElementById('root')!).render(
   <div className="flex flex-col w-full min-h-screen">
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/handleusers" element={<><Navbar /><PrivateRoute  roles={['admin']}><AdminUsersPage /></PrivateRoute></>} />
           <Route path="/" element={<div>Home</div>} />
           <Route path="/product/:productId" element={ <><Navbar /><PrivateRoute ><ProductDetailPage/></PrivateRoute></> }/>
+          <Route path="/cart"  element={ <><Navbar /><PrivateRoute ><CartPage/></PrivateRoute></> } />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </UserProvider>
