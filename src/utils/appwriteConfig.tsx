@@ -18,9 +18,16 @@ const DataBaseNames = {
 const DataBaseCollections = {
     PRODUCTS: import.meta.env.VITE_APPWRITE_PRODUCT_COLLECTION as string,
     CARTS: import.meta.env.VITE_APPWRITE_CART_COLLECTION as string,
+    ORDERS: import.meta.env.VITE_APPWRITE_ORDER_COLLECTION as string,
 };
 
 export async function GenerateProducts() {
+    const response = await databases.listDocuments(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.PRODUCTS,
+    );
+    if (response.total > 0) return;
+    
     for (let i = 0; i < 100; i++) {
         await databases.createDocument(
             DataBaseNames.ECOMMERCE,
@@ -137,9 +144,9 @@ export async function UpdateCart(productId: string | undefined, quantity: number
     if (!cart) return;
 
     const itemIndex = cart.items.findIndex((item: CartItem) => {
-        console.log(item.product.$id, productId);
         return item.product.$id === productId;
     });
+
     if (quantity > 0) {
         if (itemIndex === -1) {
             cart.items.push({
@@ -169,13 +176,26 @@ export async function CreateOrder() {
     const cart = await GetCart();
     if (!cart) return;
 
+    const productItems = cart.items.map((item: CartItem) => item.product);
+
     const order = await databases.createDocument(
         DataBaseNames.ECOMMERCE,
-        'orders',
+        DataBaseCollections.ORDERS,
         ID.unique(),
         {
-            items: cart.items,
+            products: productItems,
             user: cart.user,
+            price: cart.items.reduce((acc: number, item: CartItem) => acc + item.price * item.quantity, 0) + 5,
+        },
+    );
+    if (!order) return;
+
+    await databases.updateDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.CARTS,
+        cart.$id,
+        {
+            items: [],
         },
     );
 

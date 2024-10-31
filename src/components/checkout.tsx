@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CreateOrder } from '../utils/appwriteconfig';
 
 const CheckoutLoading: React.FC = () => {
     const [loadingStage, setLoadingStage] = useState(0);
@@ -19,7 +20,9 @@ const CheckoutLoading: React.FC = () => {
 
     const createOrder = async () => {
         return new Promise<void>((resolve) => {
-            setTimeout(() => {
+            setTimeout(async () => {
+                const order = await CreateOrder();
+                if (!order) return;
                 console.log("Order created.");
                 resolve();
             }, 2000);

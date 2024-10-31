@@ -33,8 +33,7 @@ const ProductDetailPage: React.FC = () => {
     }, [productId]);
 
     const handleAddToCart = async () => {
-        console.log(`Added ${quantity} of ${product?.name} to cart`);
-        const price = product?.isDiscounted ? product?.price - ( product?.discount * product?.price ) : product?.price || 0;
+        const price = product?.isDiscounted ? product?.price - ( (product?.discount/100) * product?.price ) : product?.price || 0;
         await UpdateCart(product?.$id, quantity, Math.round(price));
     };
 
