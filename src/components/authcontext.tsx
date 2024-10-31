@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, ReactNode, useMemo } from "react";
 import { account } from "../utils/appwriteConfig";
 import { Models } from "appwrite";
+import Spinner from "./loading";
 
 interface UserAuthContextType {
   user: Models.User<{}> | null;
@@ -58,7 +59,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (

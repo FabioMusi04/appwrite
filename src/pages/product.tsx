@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { GetProduct, UpdateCart } from '../utils/appwriteConfig';
 import { Product } from '../utils/types';
 import { FaShoppingCart } from 'react-icons/fa';
+import Spinner from '../components/loading';
 
 const ProductDetailPage: React.FC = () => {
     const { productId } = useParams();
@@ -37,7 +38,7 @@ const ProductDetailPage: React.FC = () => {
         await UpdateCart(product?.$id, quantity, Math.round(price));
     };
 
-    if (loading) return <div className="flex justify-center items-center h-screen dark:bg-gray-900">Loading...</div>;
+    if (loading) return <Spinner />;
     if (error) return <div className="text-center text-red-500 mt-6 dark:text-red-400">{error}</div>;
 
     return (

@@ -17,7 +17,12 @@ const DataBaseNames = {
 };
 const DataBaseCollections = {
     PRODUCTS: import.meta.env.VITE_APPWRITE_PRODUCT_COLLECTION as string,
+    CARTS: import.meta.env.VITE_APPWRITE_CART_COLLECTION as string,
 };
+
+
+//setup db collections fields and indexes
+
 
 export async function GenerateProducts() {
     for (let i = 0; i < 100; i++) {
@@ -92,22 +97,24 @@ export async function GetCart() {
 
     const response = await databases.listDocuments(
         DataBaseNames.ECOMMERCE,
-        'cart',
+        DataBaseCollections.CARTS,
         [
             Query.equal('userId', user.$id),
         ],
     );
 
-    if (response.documents.length === 0) {
+    if (response.total === 0) {
         const cart = await databases.createDocument(
             DataBaseNames.ECOMMERCE,
-            'cart',
+            DataBaseCollections.CARTS,
             ID.unique(),
             {
                 items: [],
                 userId: user.$id,
             },
         );
+
+        console.log ('Cart:', cart);
 
         return cart;
     }
@@ -117,16 +124,22 @@ export async function GetCart() {
 
 export async function UpdateCart(productId: string | undefined, quantity: number, price: number) {
     if (!productId) return;
+
     const cart = await GetCart();
     if (!cart) return;
 
-    const itemIndex = cart.items.findIndex((item: CartItem) => item.productId === productId);
+    const itemIndex = cart.items.findIndex((item: CartItem) => {
+        console.log(item.productId, productId);
+        return item.productId === productId;
+    });
+    console.log('Item index:', itemIndex);
     if (quantity > 0) {
         if (itemIndex === -1) {
             cart.items.push({
                 productId,
                 quantity,
                 price: price,
+                cartId: cart.$id,
             });
         } else {
             cart.items[itemIndex].quantity += quantity;
@@ -134,4 +147,13 @@ export async function UpdateCart(productId: string | undefined, quantity: number
     } else {
         cart.items.splice(itemIndex, 1);
     }
+
+    await databases.updateDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.CARTS,
+        cart.$id,
+        {
+            items: cart.items,
+        },
+    );
 }
