@@ -5,7 +5,7 @@ import { validateEmail, validatePassword } from '../utils/validation.ts';
 
 import { account, ID } from '../utils/appwriteconfig';
 import { UserAuthContext } from '../components/authcontext';
-import Spinner from '../components/loading';
+import Alert from '../components/alert.tsx';
 
 const Auth: React.FC = () => {
     const context = useContext(UserAuthContext);
@@ -23,6 +23,8 @@ const Auth: React.FC = () => {
         setIsLogin(!isLogin);
     };
 
+    const [alert, setAlert] = useState<{ message: string; type: 'info' | 'success' | 'warning' | 'error'; handleClose: () => void }>({ message: '', type: 'info', handleClose: () => {} });
+
     const submitForm = async (e: React.FormEvent) => {
         e.preventDefault();
         if (isLogin) {
@@ -30,19 +32,19 @@ const Auth: React.FC = () => {
             console.log('Logging in with:', email);
 
             if (email === '' || password === '') {
-                alert('Please fill in all fields');
+                setAlert({ message: 'Please fill in all fields', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
                 return;
             }
 
             const emailValid = validateEmail(email);
             if (!emailValid) {
-                alert('Please enter a valid email address');
+                setAlert({ message: 'Please enter a valid email address', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
                 return;
             }
 
             const passwordValid = validatePassword(password);
             if (!passwordValid) {
-                alert('Password must be at least 8 characters long');
+                setAlert({ message: 'Password must be at least 8 characters long', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
                 return;
             }
 
@@ -53,54 +55,66 @@ const Auth: React.FC = () => {
                     setUser(user);
                     console.log(user);
                     if (user?.labels?.includes('admin')) {
-                        console.log("Admin user detected");
+                        setAlert({ message: 'Welcome Admin', type: 'success', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
+
                         return navigate('/handleproducts');
                     }
                     return navigate('/products');
                 }
 
             } catch (error: any) {
-                alert(error.message);
+                setAlert({ message: error.message, type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
             }
         } else {
             const { email, password, confirmPassword, username } = form;
             console.log('Signing up with:', email, username);
 
             if (email === '' || password === '' || confirmPassword === '' || username === '') {
-                alert('Please fill in all fields');
+                setAlert({ message: 'Please fill in all fields', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
                 return;
             }
 
             const emailValid = validateEmail(email);
             if (!emailValid) {
-                alert('Please enter a valid email address');
+                setAlert({ message: 'Please enter a valid email address', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
                 return;
             }
 
             const passwordValid = validatePassword(password);
             if (!passwordValid) {
-                alert('Password must be at least 8 characters long');
+                setAlert({ message: 'Password must be at least 8 characters long', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
                 return;
             }
 
             if (password !== confirmPassword) {
-                alert('Passwords do not match');
+                setAlert({ message: 'Passwords do not match', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
                 return;
             }
 
             try {
-                const user = await account.create(ID.unique() ,email, password, username);
-                console.log(user);
+                await account.create(ID.unique() ,email, password, username);
+                
+                setAlert({ message: 'Account created successfully', type: 'success', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
 
                 setIsLogin(true);
             } catch (error: any) {
-                alert(error.message);
+                setAlert({ message: error.message, type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => {} }) });
             }
         }
     }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+            {
+                alert.message !== '' && (
+                    <Alert
+                        message={alert.message}
+                        type={alert.type}
+                        duration={3000}
+                        onClose={alert.handleClose}
+                    />
+                )
+            }
             <div className="w-full max-w-md p-10 bg-white dark:bg-gray-800 shadow-md rounded-md">
 
                 <div className="space-y-2 mb-10">
