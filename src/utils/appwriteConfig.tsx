@@ -26,8 +26,8 @@ export async function GenerateProducts() {
         DataBaseNames.ECOMMERCE,
         DataBaseCollections.PRODUCTS,
     );
-    if (response.total > 0) return;
-    
+    if (response.total > 0) return false;
+
     for (let i = 0; i < 100; i++) {
         await databases.createDocument(
             DataBaseNames.ECOMMERCE,
@@ -43,6 +43,7 @@ export async function GenerateProducts() {
                 stock: Math.floor(Math.random() * 100),
             });
     }
+    return true;
 }
 
 export async function GetProducts(page: number, limit: number) {

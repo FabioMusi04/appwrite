@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Product, ProductIns } from '../../utils/types';
-import { GenerateProducts, GetProducts, ID } from '../../utils/appwriteconfig';
-import { FaEdit  } from "react-icons/fa";
+import { GenerateProducts, GetProducts } from '../../utils/appwriteconfig';
+import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-
+import Alert from '../../components/alert';
 
 const AdminProductsPage: React.FC = () => {
+    const [alert, setAlert] = useState<{ message: string; type: 'info' | 'success' | 'warning' | 'error'; handleClose: () => void }>({ message: '', type: 'info', handleClose: () => { } });
+
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -21,7 +23,7 @@ const AdminProductsPage: React.FC = () => {
         }
     );
     const [currentPage, setCurrentPage] = useState(1);
-    const [productsPerPage] = useState(10); // Number of products per page
+    const [productsPerPage] = useState(10);
 
     useEffect(() => {
         fetchProducts();
@@ -29,7 +31,7 @@ const AdminProductsPage: React.FC = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await GetProducts(1, 100); // Fetch a larger set for pagination
+            const response = await GetProducts(1, 100);
             setProducts(response as Product[]);
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -48,11 +50,11 @@ const AdminProductsPage: React.FC = () => {
         e.preventDefault();
         try {
             if (isEditing && selectedProduct) {
-                //await axios.put(`/api/products/${selectedProduct.id}`, { ...formData });
+                // Update product code
             } else {
-                //await axios.post('/api/products', { ...formData });
+                // Add new product code
             }
-            fetchProducts(); // Refresh the product list
+            fetchProducts();
             resetForm();
         } catch (error) {
             console.error('Error saving product:', error);
@@ -75,7 +77,6 @@ const AdminProductsPage: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         try {
-           // await axios.delete(`/api/products/${id}`);
             fetchProducts();
         } catch (error) {
             console.error('Error deleting product:', error);
@@ -96,91 +97,123 @@ const AdminProductsPage: React.FC = () => {
         });
     };
 
-    // Pagination Logic
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
     const totalPages = Math.ceil(products.length / productsPerPage);
 
+
+    const generateProducts = async () => {
+        try {
+            const result = await GenerateProducts();
+            if (result) {
+                setAlert({ message: 'Sample products generated successfully', type: 'success', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
+                fetchProducts();
+            } else {
+                setAlert({ message: 'Error generating sample products', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
+            }
+        } catch (error) {
+            console.error('Error generating products:', error);
+            setAlert({ message: 'Error generating sample products', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
+        }
+    }
+
     return (
-        <div className="grow px-4 py-6 dark:bg-gray-900 dark:text-white">
-            <h1 className="text-2xl font-bold mb-4">Admin Products</h1>
-            <button onClick={GenerateProducts} className="mb-4 w-full p-2 bg-green-500 text-white rounded hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800">
-                Generate Products
+        <div className="container mx-auto p-6 dark:bg-gray-900 dark:text-white">
+            {
+                alert.message != "" && (
+                    <Alert type={alert.type} message={alert.message} onClose={alert.handleClose} />
+                )
+            }
+            <h1 className="text-3xl font-semibold text-center mb-6">Admin Products</h1>
+            <button onClick={generateProducts} className="mb-6 w-full p-3 bg-green-500 text-white rounded-md hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800">
+                Generate Sample Products
             </button>
-            <form className="mb-6" onSubmit={handleSubmit}>
-                <input type="text" name="name" placeholder="Product Name" value={formData.name} onChange={handleInputChange} className="w-full p-2 mb-2 border rounded dark:bg-gray-800 dark:border-gray-700" required />
-                <textarea name="description" placeholder="Product Description" value={formData.description} onChange={handleInputChange} className="w-full p-2 mb-2 border rounded dark:bg-gray-800 dark:border-gray-700" required />
-                <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInputChange} className="w-full p-2 mb-2 border rounded dark:bg-gray-800 dark:border-gray-700" required />
-                <input type="text" name="imageUrl" placeholder="Image URL" value={formData.imageUrl} onChange={handleInputChange} className="w-full p-2 mb-2 border rounded dark:bg-gray-800 dark:border-gray-700" required />
-                <label className="flex items-center mb-2">
-                    <input type="checkbox" name="isDiscounted" checked={formData.isDiscounted} onChange={(e) => setFormData({ ...formData, isDiscounted: e.target.checked })} className="mr-2 dark:bg-gray-800 dark:border-gray-700" />
-                    Is Discounted
-                </label>
+
+            <form className="mb-8 space-y-4 bg-gray-50 p-6 rounded-lg shadow-md dark:bg-gray-800" onSubmit={handleSubmit}>
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">Product Name</label>
+                        <input type="text" name="name" placeholder="Product Name" value={formData.name} onChange={handleInputChange} className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required />
+                    </div>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">Price</label>
+                        <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInputChange} className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required />
+                    </div>
+                </div>
+                <label className="block mb-1 text-sm font-medium">Product Description</label>
+                <textarea name="description" placeholder="Product Description" value={formData.description} onChange={handleInputChange} className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required />
+
+                <label className="block mb-1 text-sm font-medium">Image URL</label>
+                <input type="text" name="imageUrl" placeholder="Image URL" value={formData.imageUrl} onChange={handleInputChange} className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required />
+
+                <div className="flex items-center mb-4">
+                    <input type="checkbox" name="isDiscounted" checked={formData.isDiscounted} onChange={(e) => setFormData({ ...formData, isDiscounted: e.target.checked })} className="mr-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <label className="text-sm font-medium">Discounted</label>
+                </div>
                 {formData.isDiscounted && (
-                    <input type="number" name="discount" placeholder="Discount" value={formData.discount} onChange={handleInputChange} className="w-full p-2 mb-2 border rounded dark:bg-gray-800 dark:border-gray-700" />
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">Discount</label>
+                        <input type="number" name="discount" placeholder="Discount" value={formData.discount} onChange={handleInputChange} className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" />
+                    </div>
                 )}
-                <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInputChange} className="w-full p-2 mb-2 border rounded dark:bg-gray-800 dark:border-gray-700" required />
-                <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
-                    {isEditing ? 'Update Product' : 'Add Product'}
-                </button>
-                {isEditing && (
-                    <button type="button" onClick={resetForm} className="mt-2 w-full p-2 bg-red-500 text-white rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-                        Cancel
+                <label className="block mb-1 text-sm font-medium">Stock Quantity</label>
+                <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInputChange} className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required />
+
+                <div className="flex gap-4 mt-4">
+                    <button type="submit" className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
+                        {isEditing ? 'Update Product' : 'Add Product'}
                     </button>
-                )}
+                    {isEditing && (
+                        <button type="button" onClick={resetForm} className="w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
+                            Cancel
+                        </button>
+                    )}
+                </div>
             </form>
-
-            <table className="min-w-full bg-white dark:bg-gray-800">
-                <thead>
-                    <tr className="border-b dark:border-gray-700">
-                        <th className="p-4 text-center">Image</th>
-                        <th className="p-4 text-center">Name</th>
-                        <th className="p-4 text-center">Description</th>
-                        <th className="p-4 text-center">Price</th>
-                        <th className="p-4 text-center">Stock</th>
-                        <th className="p-4 text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentProducts.map((product: Product) => (
-                        <tr key={ID.unique()} className="border-b dark:border-gray-700 text-center">
-                            <td className="p-4">
-                                <img src={product.imageUrl} alt={product.name} className="w-16 h-16 object-cover rounded" />
-                            </td>
-                            <td className="p-4">{product.name}</td>
-                            <td className="p-4">{product.description}</td>
-                            <td className="p-4">${product.price.toFixed(2)}</td>
-                            <td className="p-4">{product.stock}</td>
-                            <td className="p-4">
-                                <button onClick={() => handleEdit(product)} className="p-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800">
-                                    <FaEdit/>
-                                </button>
-                                <button onClick={() => handleDelete(product.$id)} className="ml-2 p-2 bg-red-500 text-white rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-                                    <MdDelete/>
-                                </button>
-                            </td>
+            
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-700">
+                    <thead>
+                        <tr className="border-b bg-gray-200 dark:bg-gray-700">
+                            <th className="p-4 text-center">Image</th>
+                            <th className="p-4 text-center">Name</th>
+                            <th className="p-4 text-center">Description</th>
+                            <th className="p-4 text-center">Price</th>
+                            <th className="p-4 text-center">Stock</th>
+                            <th className="p-4 text-center">Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {currentProducts.map((product) => (
+                            <tr key={product.$id} className="border-b text-center dark:border-gray-700">
+                                <td className="p-4">
+                                    <img src={product.imageUrl} alt={product.name} className="w-16 h-16 object-cover rounded" />
+                                </td>
+                                <td className="p-4">{product.name}</td>
+                                <td className="p-4 truncate max-w-xs">{product.description}</td>
+                                <td className="p-4">${product.price.toFixed(2)}</td>
+                                <td className="p-4">{product.stock}</td>
+                                <td className="p-4">
+                                    <button onClick={() => handleEdit(product)} className="p-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 mr-2">
+                                        <FaEdit />
+                                    </button>
+                                    <button onClick={() => handleDelete(product.$id)} className="p-2 bg-red-500 text-white rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
+                                        <MdDelete />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
-            <div className="flex justify-between mt-4">
-                <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800"
-                >
+            <div className="flex justify-between items-center mt-6">
+                <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
                     Previous
                 </button>
-                <span>
-                    Page {currentPage} of {totalPages}
-                </span>
-                <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800"
-                >
+                <span className="text-sm">Page {currentPage} of {totalPages}</span>
+                <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
                     Next
                 </button>
             </div>
