@@ -235,7 +235,6 @@ export async function CreateOrderFromCart() {
             DataBaseCollections.CART_ITEMS,
             item.$id,
         );
-
         await databases.updateDocument(
             DataBaseNames.ECOMMERCE,
             DataBaseCollections.PRODUCTS,

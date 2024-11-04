@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserAuthContext } from "./authcontext";
+import Spinner from "./loading";
 
 interface ProtectedRouteProps {
     children: JSX.Element;
@@ -11,7 +12,7 @@ const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
     const { user, isLoading } = useContext(UserAuthContext) ?? {};
 
     if (isLoading) {
-        return <div>Loading...</div>; 
+        return <Spinner />; 
     }
 
     if (!user) {

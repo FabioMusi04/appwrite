@@ -16,6 +16,7 @@ import HomePage from './pages/home';
 import NotFound from './pages/notfound';
 import OrdersPage from './pages/orders';
 import AdminOrdersPage from './pages/backoffice/ordersCRUD';
+import Unauthorized from './pages/unauthorized';
 
 createRoot(document.getElementById('root')!).render(
   <div className="flex flex-col w-full min-h-screen">
@@ -29,10 +30,11 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/product/:productId" element={ <><Navbar /><PrivateRoute ><ProductDetailPage/></PrivateRoute></> }/>
           <Route path="/cart"  element={ <><Navbar /><PrivateRoute ><CartPage/></PrivateRoute></> } />
           <Route path="/myorders" element={ <><Navbar /><PrivateRoute ><OrdersPage/></PrivateRoute></> } />
-          <Route path="*" element={<NotFound/>} />
           <Route path="/handleproducts" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminProductsPage /></PrivateRoute></>} />
           <Route path="/handleusers" element={<><Navbar /><PrivateRoute  roles={['admin']}><AdminUsersPage /></PrivateRoute></>} />
           <Route path="/handleorders" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminOrdersPage/></PrivateRoute></>} />
+          <Route path="/unauthorized" element={<PrivateRoute><Unauthorized/></PrivateRoute>} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
       </UserProvider>
     </Router>
