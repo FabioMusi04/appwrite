@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Product, ProductIns } from '../../utils/types';
-import { GenerateProducts, GetProducts } from '../../utils/appwriteconfig';
+import { CreateProduct, DeleteProduct, GenerateProducts, GetProducts, UpdateCart, UpdateProduct } from '../../utils/appwriteconfig';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import Alert from '../../components/alert';
@@ -31,7 +31,7 @@ const AdminProductsPage: React.FC = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await GetProducts(1, 100);
+            const response = await GetProducts(1, 200);
             setProducts(response as Product[]);
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -50,14 +50,19 @@ const AdminProductsPage: React.FC = () => {
         e.preventDefault();
         try {
             if (isEditing && selectedProduct) {
-                // Update product code
+                await UpdateProduct(selectedProduct.$id, formData);
+
+                setAlert({ message: 'Product updated successfully', type: 'success', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
             } else {
-                // Add new product code
+                await CreateProduct(formData);
+
+                setAlert({ message: 'Product saved successfully', type: 'success', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
             }
             fetchProducts();
             resetForm();
         } catch (error) {
             console.error('Error saving product:', error);
+            setAlert({ message: 'Error saving product', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
         }
     };
 
@@ -77,9 +82,12 @@ const AdminProductsPage: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         try {
+            await DeleteProduct(id);
+            setAlert({ message: 'Product deleted successfully', type: 'success', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
             fetchProducts();
         } catch (error) {
             console.error('Error deleting product:', error);
+            setAlert({ message: 'Error deleting product', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
         }
     };
 

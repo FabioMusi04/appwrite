@@ -48,12 +48,12 @@ const OrdersPage: React.FC = () => {
     }, [selectedOrder]);
 
     return (
-        <div className="bg-gray-100 dark:bg-gray-900 dark:text-white min-h-screen py-10">
+        <div className="bg-gray-100 dark:bg-gray-900 dark:text-white grow py-10">
             <OrderInfoModal isOpen={orderInfoModalOpen} onClose={() => {
                 setOrderInfoModalOpen(false);
                 setSelectedOrder(null);
             }} order={selectedOrder} />
-            <div className="container mx-auto p-4">
+            <div className="px-4">
                 <h1 className="text-3xl font-extrabold mb-6 text-gray-800 dark:text-white">Your Orders</h1>
                 {Object.keys(groupedOrders).length === 0 && !loading && (
                     <p className="text-center text-gray-500">No orders found.</p>

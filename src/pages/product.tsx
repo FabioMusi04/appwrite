@@ -4,6 +4,7 @@ import { GetProduct, UpdateCart } from '../utils/appwriteconfig';
 import { Product } from '../utils/types';
 import { FaShoppingCart } from 'react-icons/fa';
 import Spinner from '../components/loading';
+import Alert from '../components/alert';
 
 const ProductDetailPage: React.FC = () => {
     const { productId } = useParams();
@@ -11,6 +12,7 @@ const ProductDetailPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
+    const [alert, setAlert] = useState<{ message: string; type: 'info' | 'success' | 'warning' | 'error'; handleClose: () => void }>({ message: '', type: 'info', handleClose: () => { } });
 
     const fetchProduct = async (id: string) => {
         setLoading(true);
@@ -33,8 +35,17 @@ const ProductDetailPage: React.FC = () => {
     }, [productId]);
 
     const handleAddToCart = async () => {
-        const price = product?.isDiscounted ? product?.price - ( (product?.discount/100) * product?.price ) : product?.price || 0;
-        await UpdateCart(product?.$id, quantity, Math.round(price));
+        try {
+            const price = product?.isDiscounted ? product?.price - ((product?.discount / 100) * product?.price) : product?.price || 0;
+            await UpdateCart(product?.$id, quantity, Math.round(price));
+            setAlert({ message: 'Product added to cart', type: 'success', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
+        }
+        catch (error) {
+            console.error('Error adding product to cart:', error);
+            setAlert({ message: 'Failed to add product to cart', type: 'error', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
+        }
+
+
     };
 
     if (loading) return <Spinner />;
@@ -42,6 +53,11 @@ const ProductDetailPage: React.FC = () => {
 
     return (
         <div className="flex justify-center items-center grow dark:bg-gray-900 dark:text-white">
+            {
+                alert.message != "" && (
+                    <Alert message={alert.message} type={alert.type} onClose={alert.handleClose} />
+                )
+            }
             <div className="grow px-4 py-6 dark:bg-gray-900 dark:text-white max-w-4xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>

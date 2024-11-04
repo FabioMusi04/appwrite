@@ -80,7 +80,7 @@ const ProductsPage: React.FC = () => {
                     </div>
                 ))}
             </div>
-            <div ref={ref} className="h-16 flex items-center justify-center">
+            <div ref={ref} className="text-center">
                 {loading ? <Spinner /> : hasMore ? <span>Scroll down for more products...</span> : <span>No more products!</span>}
             </div>
         </div>

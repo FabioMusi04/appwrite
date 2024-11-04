@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Cart } from '../utils/types';
-import { CreateOrder, GetCart } from '../utils/appwriteconfig';
+import { GetCart } from '../utils/appwriteconfig';
 import Checkout from '../components/checkout';
+import Alert from '../components/alert';
 
 const CartPage: React.FC = () => {
-    const [cartItems, setCartItems] = useState<Cart>();
+    const [cartItems, setCartItems] = useState<Cart>(); 
+    const [alert, setAlert] = useState<{ message: string; type: 'info' | 'success' | 'warning' | 'error'; handleClose: () => void }>({ message: '', type: 'info', handleClose: () => { } });
 
     const [isCheckingOut, setIsCheckingOut] = useState(false);
 
@@ -30,6 +32,9 @@ const CartPage: React.FC = () => {
                 .filter((item) => item.quantity > 0);
             return { ...prevItems, items: updatedItems };
         });
+        if (quantity === 0) {
+            setAlert({ message: 'Product removed from cart', type: 'warning', handleClose: () => setAlert({ message: '', type: 'info', handleClose: () => { } }) });
+        }
     };
 
     const totalCost = cartItems?.items.reduce(
@@ -39,6 +44,11 @@ const CartPage: React.FC = () => {
 
     return (
         <div className="grow p-4 dark:bg-gray-900 dark:text-white">
+              {
+                alert.message != "" && (
+                    <Alert message={alert.message} type={alert.type} onClose={alert.handleClose} />
+                )
+            }
             {isCheckingOut ? <Checkout /> : (
                 <>
                     <h1 className="text-2xl font-bold mb-6 text-center">Shopping Cart</h1>

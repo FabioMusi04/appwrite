@@ -1,5 +1,5 @@
 import { Client, Account, Databases, ID, Query } from 'appwrite';
-import { CartItem } from './types';
+import { CartItem, Order } from './types';
 
 export const client = new Client();
 
@@ -96,6 +96,32 @@ export async function GetProductsWithSearch(page: number, limit: number, search:
     
 
     return response.documents;
+}
+
+export async function CreateProduct(product: any) {
+    await databases.createDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.PRODUCTS,
+        ID.unique(),
+        product,
+    );
+}
+
+export async function UpdateProduct(productId: string, product: any) {
+    await databases.updateDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.PRODUCTS,
+        productId,
+        product,
+    );
+}
+
+export async function DeleteProduct(productId: string) {
+    await databases.deleteDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.PRODUCTS,
+        productId,
+    );
 }
 
 export async function GetUsers(page: number, limit: number) {
