@@ -14,6 +14,7 @@ import CartPage from './pages/cart';
 import ProfilePage from './pages/profilepage';
 import HomePage from './pages/home';
 import NotFound from './pages/notfound';
+import OrdersPage from './pages/orders';
 
 createRoot(document.getElementById('root')!).render(
   <div className="flex flex-col w-full min-h-screen">
@@ -23,12 +24,13 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/auth" element={<Auth />} />
           <Route path="/me"  element={ <><Navbar /><PrivateRoute ><ProfilePage/></PrivateRoute></> } />
           <Route path="/products" element={<><Navbar /><PrivateRoute><ProductsPage /></PrivateRoute></>} />
-          <Route path="/handleproducts" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminProductsPage /></PrivateRoute></>} />
-          <Route path="/handleusers" element={<><Navbar /><PrivateRoute  roles={['admin']}><AdminUsersPage /></PrivateRoute></>} />
           <Route path="/" element={<HomePage/>} />
           <Route path="/product/:productId" element={ <><Navbar /><PrivateRoute ><ProductDetailPage/></PrivateRoute></> }/>
           <Route path="/cart"  element={ <><Navbar /><PrivateRoute ><CartPage/></PrivateRoute></> } />
+          <Route path="/myorders" element={ <><Navbar /><PrivateRoute ><OrdersPage/></PrivateRoute></> } />
           <Route path="*" element={<NotFound/>} />
+          <Route path="/handleproducts" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminProductsPage /></PrivateRoute></>} />
+          <Route path="/handleusers" element={<><Navbar /><PrivateRoute  roles={['admin']}><AdminUsersPage /></PrivateRoute></>} />
         </Routes>
       </UserProvider>
     </Router>

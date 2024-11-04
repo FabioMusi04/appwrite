@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Cart } from '../utils/types';
-import { GetCart } from '../utils/appwriteconfig';
+import { CreateOrder, GetCart } from '../utils/appwriteconfig';
 import Checkout from '../components/checkout';
 
 const CartPage: React.FC = () => {

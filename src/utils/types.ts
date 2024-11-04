@@ -47,3 +47,17 @@ export interface User {
     name: string;
     email: string;
 }
+
+export interface Order {
+    user: string;
+    products: Product[];
+    status: string;
+    price: number;
+
+    $id: string;
+    $createdAt: string;
+    $updatedAt: string;
+    $permissions: string[];
+    $databaseId: string;
+    $collectionId: string;
+}

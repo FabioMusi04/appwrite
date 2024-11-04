@@ -19,6 +19,7 @@ const DataBaseCollections = {
     PRODUCTS: import.meta.env.VITE_APPWRITE_PRODUCT_COLLECTION as string,
     CARTS: import.meta.env.VITE_APPWRITE_CART_COLLECTION as string,
     ORDERS: import.meta.env.VITE_APPWRITE_ORDER_COLLECTION as string,
+    CART_ITEMS: import.meta.env.VITE_APPWRITE_CART_ITEMS_COLLECTION as string,
 };
 
 export async function GenerateProducts() {
@@ -177,7 +178,8 @@ export async function CreateOrder() {
     const cart = await GetCart();
     if (!cart) return;
 
-    const productItems = cart.items.map((item: CartItem) => item.product);
+    const productItems = cart.items.map((item: CartItem) => item.product.$id);
+    console.log('Product Items:', productItems);
 
     const order = await databases.createDocument(
         DataBaseNames.ECOMMERCE,
@@ -189,6 +191,7 @@ export async function CreateOrder() {
             price: cart.items.reduce((acc: number, item: CartItem) => acc + item.price * item.quantity, 0) + 5,
         },
     );
+
     if (!order) return;
 
     await databases.updateDocument(
@@ -200,5 +203,49 @@ export async function CreateOrder() {
         },
     );
 
+    for (const item of cart.items) {
+        await databases.deleteDocument(
+            DataBaseNames.ECOMMERCE,
+            DataBaseCollections.CART_ITEMS,
+            item.$id,
+        );
+
+        await databases.updateDocument(
+            DataBaseNames.ECOMMERCE,
+            DataBaseCollections.PRODUCTS,
+            item.product.$id,
+            {
+                stock: item.product.stock - item.quantity,
+            },
+        );
+    }
+
+
     return order;
+}
+
+
+export async function GetOrders() {
+    const user = await account.get();
+    if (!user) return null;
+
+    const response = await databases.listDocuments(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.ORDERS,
+        [
+            Query.equal('user', user.$id),
+        ],
+    );
+
+    return response.documents;
+}
+
+export async function GetOrder(id: string) {
+    const response = await databases.getDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.ORDERS,
+        id,
+    );
+
+    return response;
 }

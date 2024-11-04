@@ -8,6 +8,8 @@ import { GrNotes } from "react-icons/gr";
 import { FcAbout } from "react-icons/fc";
 import { IoPerson } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
+import { TbPackages } from "react-icons/tb";
+
 
 
 const Navbar: React.FC = () => {
@@ -24,6 +26,7 @@ const Navbar: React.FC = () => {
           <div className="hidden md:flex space-x-4">
             <Link to="/products" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FaShoppingBag className="h-6 w-6" /></Link>
             <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FcAbout className="h-6 w-6" /></Link>
+            <Link to="/myorders" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><TbPackages className="h-6 w-6" /></Link>
             {user && user?.labels?.includes('admin') && (
               <>
               <Link to="/handleproducts" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"><FiPackage className="h-6 w-6"  /></Link>

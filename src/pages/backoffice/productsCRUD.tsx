@@ -119,7 +119,7 @@ const AdminProductsPage: React.FC = () => {
     }
 
     return (
-        <div className="container mx-auto p-6 dark:bg-gray-900 dark:text-white">
+        <div className="grow p-6 dark:bg-gray-900 dark:text-white">
             {
                 alert.message != "" && (
                     <Alert type={alert.type} message={alert.message} onClose={alert.handleClose} />
