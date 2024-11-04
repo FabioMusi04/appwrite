@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { CreateOrder } from '../utils/appwriteconfig';
+import { CreateOrderFromCart } from '../utils/appwriteconfig';
+import { useNavigate } from 'react-router-dom';
 
 const CheckoutLoading: React.FC = () => {
+    const navigate = useNavigate();
     const [loadingStage, setLoadingStage] = useState(0);
     const loadingMessages = [
         { message: 'Processing Payment...', icon: '💳' },
@@ -21,7 +23,7 @@ const CheckoutLoading: React.FC = () => {
     const createOrder = async () => {
         return new Promise<void>((resolve) => {
             setTimeout(async () => {
-                const order = await CreateOrder();
+                const order = await CreateOrderFromCart();
                 if (!order) return;
                 console.log("Order created.");
                 resolve();
@@ -45,7 +47,10 @@ const CheckoutLoading: React.FC = () => {
                 
                 if (i === 0) await processPayment();
                 else if (i === 1) await createOrder();
-                else if (i === 2) await finalizeOrder();
+                else if (i === 2) {
+                    await finalizeOrder();
+                    navigate('/myorders');
+                }
             }
         };
 

@@ -174,7 +174,7 @@ export async function UpdateCart(productId: string | undefined, quantity: number
     );
 }
 
-export async function CreateOrder() {
+export async function CreateOrderFromCart() {
     const cart = await GetCart();
     if (!cart) return;
 
@@ -225,7 +225,7 @@ export async function CreateOrder() {
 }
 
 
-export async function GetOrders() {
+export async function GetOrdersMe() {
     const user = await account.get();
     if (!user) return null;
 
@@ -240,6 +240,19 @@ export async function GetOrders() {
     return response.documents;
 }
 
+export async function GetOrders(page: number, limit: number) {
+    const response = await databases.listDocuments(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.ORDERS,
+        [
+            Query.limit(limit),
+            Query.offset((page - 1) * limit),
+        ],
+    );
+
+    return response.documents;
+}
+
 export async function GetOrder(id: string) {
     const response = await databases.getDocument(
         DataBaseNames.ECOMMERCE,
@@ -248,4 +261,21 @@ export async function GetOrder(id: string) {
     );
 
     return response;
+}
+
+export async function UpdateOrder(orderId: string, order: any) {
+    await databases.updateDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.ORDERS,
+        orderId,
+        order,
+    );
+}
+
+export async function DeleteOrder(orderId: string) {
+    await databases.deleteDocument(
+        DataBaseNames.ECOMMERCE,
+        DataBaseCollections.ORDERS,
+        orderId,
+    );
 }

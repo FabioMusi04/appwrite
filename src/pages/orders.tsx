@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Order } from '../utils/types';
-import { GetOrders } from '../utils/appwriteconfig';
+import { GetOrdersMe } from '../utils/appwriteconfig';
 import Spinner from '../components/loading';
 import OrderInfoModal from '../components/orderinfomodal';
 
@@ -29,7 +29,7 @@ const OrdersPage: React.FC = () => {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            const response = await GetOrders() as Order[];
+            const response = await GetOrdersMe() as Order[];
             setOrders(response);
             setLoading(false);
         };
@@ -73,7 +73,15 @@ const OrdersPage: React.FC = () => {
                                             <p className="text-sm text-gray-500 dark:text-gray-400">Placed on: {new Date(order.$createdAt).toLocaleDateString()}</p>
                                         </div>
                                         <div>
-                                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${order.status === 'Shipped' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                                order.status === 'shipped' ? 'bg-green-200 text-green-800' :
+                                                order.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
+                                                order.status === 'processing' ? 'bg-blue-200 text-blue-800' :
+                                                order.status === 'delivered' ? 'bg-purple-200 text-purple-800' :
+                                                order.status === 'cancelled' ? 'bg-red-200 text-red-800' :
+                                                order.status === 'returned' ? 'bg-gray-200 text-gray-800' :
+                                                ''
+                                            }`}>
                                                 {order.status}
                                             </span>
                                         </div>

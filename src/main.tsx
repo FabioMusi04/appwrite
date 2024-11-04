@@ -15,6 +15,7 @@ import ProfilePage from './pages/profilepage';
 import HomePage from './pages/home';
 import NotFound from './pages/notfound';
 import OrdersPage from './pages/orders';
+import AdminOrdersPage from './pages/backoffice/ordersCRUD';
 
 createRoot(document.getElementById('root')!).render(
   <div className="flex flex-col w-full min-h-screen">
@@ -31,6 +32,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="*" element={<NotFound/>} />
           <Route path="/handleproducts" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminProductsPage /></PrivateRoute></>} />
           <Route path="/handleusers" element={<><Navbar /><PrivateRoute  roles={['admin']}><AdminUsersPage /></PrivateRoute></>} />
+          <Route path="/handleorders" element={<><Navbar /><PrivateRoute roles={['admin']}><AdminOrdersPage/></PrivateRoute></>} />
         </Routes>
       </UserProvider>
     </Router>

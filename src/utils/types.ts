@@ -61,3 +61,12 @@ export interface Order {
     $databaseId: string;
     $collectionId: string;
 }
+
+export const orderStatusEnum = {
+    pending: 'pending',
+    processing: 'processing',
+    shipped: 'shipped',
+    delivered: 'delivered',
+    cancelled: 'cancelled',
+    returned: 'returned',
+};
