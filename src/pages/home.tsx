@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
                 {error ? (
                     <div className="text-center text-red-500">{error}</div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-6">
                         {products.map((product) => (
                             <div key={product.$id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
                                 <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover" />
