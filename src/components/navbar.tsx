@@ -7,6 +7,7 @@ import { FcAbout } from 'react-icons/fc';
 import { IoMdPerson, IoMdLogOut } from 'react-icons/io';
 import { TbPackages } from 'react-icons/tb';
 import { UserAuthContext } from '../components/authcontext';
+import ToggleTheme from './toggletheme';
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,7 +35,6 @@ const Navbar: React.FC = () => {
           </div>
         </div>
         
-        {/* Right Section */}
         <div className="flex items-center space-x-4">
           <Link to="/cart" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">
             <FaShoppingCart className="h-6 w-6" />
@@ -53,6 +53,9 @@ const Navbar: React.FC = () => {
           ) : (
             <Link to="/auth" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">Login</Link>
           )}
+
+          <ToggleTheme />
+
         </div>
 
         {/* Mobile Menu Button */}
