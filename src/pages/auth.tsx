@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { validateEmail, validatePassword } from '../utils/validation.ts';
@@ -9,8 +9,17 @@ import Alert from '../components/alert.tsx';
 
 const Auth: React.FC = () => {
     const context = useContext(UserAuthContext);
-    const { setUser } = context!;
+    const { setUser, user } = context!;
     const navigate = useNavigate();
+    useEffect(() => {
+        if (user) {
+            if (user.$id) {
+                navigate('/products');
+            }
+        }
+    }, [user, navigate]);
+
+
     const [form, setForm] = useState({ email: '', password: '', confirmPassword: '', username: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [isLogin, setIsLogin] = useState(true);
