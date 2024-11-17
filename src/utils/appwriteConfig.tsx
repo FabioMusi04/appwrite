@@ -1,13 +1,16 @@
 import { Client, Account, Databases, ID, Query } from 'appwrite';
-import { CartItem, Order } from './types';
+import { CartItem, Order, Product, ProductIns } from './types';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const client = new Client();
 
 client
     .setEndpoint('https://cloud.appwrite.io/v1')
     .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const account = new Account(client);
+// eslint-disable-next-line react-refresh/only-export-components
 export { ID } from 'appwrite';
 
 const databases = new Databases(client);
@@ -98,7 +101,7 @@ export async function GetProductsWithSearch(page: number, limit: number, search:
     return response.documents;
 }
 
-export async function CreateProduct(product: any) {
+export async function CreateProduct(product: ProductIns) {
     await databases.createDocument(
         DataBaseNames.ECOMMERCE,
         DataBaseCollections.PRODUCTS,
@@ -107,7 +110,7 @@ export async function CreateProduct(product: any) {
     );
 }
 
-export async function UpdateProduct(productId: string, product: any) {
+export async function UpdateProduct(productId: string, product: Product) {
     await databases.updateDocument(
         DataBaseNames.ECOMMERCE,
         DataBaseCollections.PRODUCTS,
@@ -125,6 +128,7 @@ export async function DeleteProduct(productId: string) {
 }
 
 export async function GetUsers(page: number, limit: number) {
+    console.log('GetUsers:', page, limit);
     const response = {
         users: [
         ],
@@ -288,7 +292,7 @@ export async function GetOrder(id: string) {
     return response;
 }
 
-export async function UpdateOrder(orderId: string, order: any) {
+export async function UpdateOrder(orderId: string, order: Order) {
     await databases.updateDocument(
         DataBaseNames.ECOMMERCE,
         DataBaseCollections.ORDERS,
